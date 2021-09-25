@@ -1,22 +1,28 @@
 nnoremap ci( :call DoMoreInBrackets("\(", "c", "i")<CR>
-nnoremap di( :call DoMoreInBrackets("\(", "d", "i")<CR>
-nnoremap yi( :call DoMoreInBrackets("\(", "y", "i")<CR>
 nnoremap ci[ :call DoMoreInBrackets("[", "c", "i")<CR>
-nnoremap di[ :call DoMoreInBrackets("[", "d", "i")<CR>
-nnoremap yi[ :call DoMoreInBrackets("[", "y", "i")<CR>
 nnoremap ci{ :call DoMoreInBrackets("{", "c", "i")<CR>
+nnoremap di( :call DoMoreInBrackets("\(", "d", "i")<CR>
+nnoremap di[ :call DoMoreInBrackets("[", "d", "i")<CR>
 nnoremap di{ :call DoMoreInBrackets("{", "d", "i")<CR>
+nnoremap vi( :call DoMoreInBrackets("\(", "v", "i")<CR>
+nnoremap vi[ :call DoMoreInBrackets("[", "v", "i")<CR>
+nnoremap vi{ :call DoMoreInBrackets("{", "v", "i")<CR>
+nnoremap yi( :call DoMoreInBrackets("\(", "y", "i")<CR>
+nnoremap yi[ :call DoMoreInBrackets("[", "y", "i")<CR>
 nnoremap yi{ :call DoMoreInBrackets("{", "y", "i")<CR>
 
 " TODO: give open and closing brackets different behaviors
 nnoremap ci) :call DoMoreInBrackets("\(", "c", "i")<CR>
-nnoremap di) :call DoMoreInBrackets("\(", "d", "i")<CR>
-nnoremap yi) :call DoMoreInBrackets("\(", "y", "i")<CR>
 nnoremap ci] :call DoMoreInBrackets("[", "c", "i")<CR>
-nnoremap di] :call DoMoreInBrackets("[", "d", "i")<CR>
-nnoremap yi] :call DoMoreInBrackets("[", "y", "i")<CR>
 nnoremap ci} :call DoMoreInBrackets("{", "c", "i")<CR>
+nnoremap di) :call DoMoreInBrackets("\(", "d", "i")<CR>
+nnoremap di] :call DoMoreInBrackets("[", "d", "i")<CR>
 nnoremap di} :call DoMoreInBrackets("{", "d", "i")<CR>
+nnoremap vi) :call DoMoreInBrackets("\(", "v", "i")<CR>
+nnoremap vi] :call DoMoreInBrackets("[", "v", "i")<CR>
+nnoremap vi} :call DoMoreInBrackets("{", "v", "i")<CR>
+nnoremap yi) :call DoMoreInBrackets("\(", "y", "i")<CR>
+nnoremap yi] :call DoMoreInBrackets("[", "y", "i")<CR>
 nnoremap yi} :call DoMoreInBrackets("{", "y", "i")<CR>
 
 nnoremap ci" :call DoMoreInQuotes('"', "c", "i")<CR>
@@ -25,6 +31,9 @@ nnoremap ci' :call DoMoreInQuotes("'", "c", "i")<CR>
 nnoremap di" :call DoMoreInQuotes('"', "d", "i")<CR>
 nnoremap di` :call DoMoreInQuotes('`', "d", "i")<CR>
 nnoremap di' :call DoMoreInQuotes("'", "d", "i")<CR>
+nnoremap vi" :call DoMoreInQuotes('"', "v", "i")<CR>
+nnoremap vi` :call DoMoreInQuotes('`', "v", "i")<CR>
+nnoremap vi' :call DoMoreInQuotes("'", "v", "i")<CR>
 nnoremap yi" :call DoMoreInQuotes('"', "y", "i")<CR>
 nnoremap yi` :call DoMoreInQuotes('`', "y", "i")<CR>
 nnoremap yi' :call DoMoreInQuotes("'", "y", "i")<CR>
@@ -35,6 +44,9 @@ nnoremap ca' :call DoMoreInQuotes("'", "c", "a")<CR>
 nnoremap da" :call DoMoreInQuotes('"', "d", "a")<CR>
 nnoremap da` :call DoMoreInQuotes('`', "d", "a")<CR>
 nnoremap da' :call DoMoreInQuotes("'", "d", "a")<CR>
+nnoremap va" :call DoMoreInQuotes('"', "v", "a")<CR>
+nnoremap va` :call DoMoreInQuotes('`', "v", "a")<CR>
+nnoremap va' :call DoMoreInQuotes("'", "v", "a")<CR>
 nnoremap ya" :call DoMoreInQuotes('"', "y", "a")<CR>
 nnoremap ya` :call DoMoreInQuotes('`', "y", "a")<CR>
 nnoremap ya' :call DoMoreInQuotes("'", "y", "a")<CR>
@@ -50,6 +62,11 @@ function DoMoreInQuotes(c, f, m)
 
 	" try to execute <function> left of cursor if line length is unchanged
 	if startpos[2] == getcurpos()[2] && startlen == col("$")-1
+		" handle visual mode
+		if a:f == "v"
+			exec "normal! \<Esc>"
+		endif
+
 		"let startchar = matchstr(getline('.'), '\%' . col('.') . 'c.')
 		execute "normal! 2F" . a:c . a:f . a:m . a:c
 		" edge case if cursor is on a asterisk/backtick/etc
@@ -86,6 +103,11 @@ function DoMoreInBrackets(c, f, m)
 	" if line length and cursor position are unchanged move to next
 	" <character> and retry
 	if startpos[2] == getcurpos()[2] && startlen == col("$")-1
+		" handle visual mode
+		if a:f == "v"
+			exec "normal! \<Esc>"
+		endif
+
 		exec "normal! f" . a:c
 		execute "normal! " . a:f . a:m . a:c
 		" edge case if cursor is on a bracket/parenthesis/etc
@@ -97,6 +119,11 @@ function DoMoreInBrackets(c, f, m)
 
 	" execute <function> left of cursor if possible
 	if startpos[2] == getcurpos()[2] && startlen == col("$")-1
+		" handle visual mode
+		if a:f == "v"
+			exec "normal! \<Esc>"
+		endif
+
 		execute "normal! F" . a:c . a:f . a:m . a:c
 	else
 		return 0
