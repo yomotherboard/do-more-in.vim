@@ -73,6 +73,8 @@ function DoMoreInQuotes(c, f, m)
 		" <-- handle edge case -->
 	else
 		" if line length has changed then return success
+		normal! l
+		startinsert
 		return 0
 	endif
 
@@ -113,6 +115,8 @@ function DoMoreInBrackets(c, f, m)
 		" edge case if cursor is on a bracket/parenthesis/etc
 		" <-- handle edge case -->
 	else
+		normal! l
+		startinsert
 		return 0
 	endif
 
@@ -126,6 +130,8 @@ function DoMoreInBrackets(c, f, m)
 
 		execute "normal! F" . a:c . a:f . a:m . a:c
 	else
+		normal! l
+		startinsert
 		return 0
 	endif
 
